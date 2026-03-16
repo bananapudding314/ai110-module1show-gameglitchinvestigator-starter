@@ -35,6 +35,8 @@ def check_guess(guess, secret):
 
     try:
         if guess > secret:
+            # FIXME - return statement is incorrect
+            # FIX - returns "too high, go lower" if guess > secret and "too low, go higher" otherwise
             return "Too High", "📉 Go LOWER!"
         else:
             return "Too Low", "📈 Go HIGHER!"
@@ -89,7 +91,10 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
+# FIXME - when switching difficulty, needs to generate random number in the correct range
+# FIX - the random.randint() range is from low to high (low being the value of the lower limit for the difficulty level and high being the upper limit)
 if "secret" not in st.session_state or st.session_state.get("difficulty") != difficulty:
+    # FIXME - random range should be based on the lower and upper limit for each difficulty level, not fixed to 1-100
     st.session_state.secret = random.randint(low, high)
     st.session_state.difficulty = difficulty
 
@@ -127,12 +132,16 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
+# FIXME - The instructions for the user need to display the right range for the random number
+# FIX - 1 and 100 are changed to low and high
 st.info(
     f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts - (1 if submit else 0)}"
 )
 
 if new_game:
+    # FIXME - need to reset game status when new game starts
+    # FIX - session state status sets to "playing" when new game starts
     st.session_state.attempts = 0
     st.session_state.secret = random.randint(low, high)
     st.session_state.status = "playing"
