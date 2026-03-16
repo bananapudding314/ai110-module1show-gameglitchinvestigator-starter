@@ -35,16 +35,16 @@ def check_guess(guess, secret):
 
     try:
         if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
+            return "Too High", "📉 Go LOWER!"
         else:
-            return "Too Low", "📉 Go LOWER!"
+            return "Too Low", "📈 Go HIGHER!"
     except TypeError:
         g = str(guess)
         if g == secret:
             return "Win", "🎉 Correct!"
         if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
+            return "Too High", "📉 Go LOWER!"
+        return "Too Low", "📈 Go HIGHER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
@@ -107,11 +107,6 @@ if "history" not in st.session_state:
 
 st.subheader("Make a guess")
 
-st.info(
-    f"Guess a number between {low} and {high}. "
-    f"Attempts left: {attempt_limit - st.session_state.attempts}"
-)
-
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
     st.write("Attempts:", st.session_state.attempts)
@@ -131,6 +126,11 @@ with col2:
     new_game = st.button("New Game 🔁")
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
+
+st.info(
+    f"Guess a number between {low} and {high}. "
+    f"Attempts left: {attempt_limit - st.session_state.attempts - (1 if submit else 0)}"
+)
 
 if new_game:
     st.session_state.attempts = 0
